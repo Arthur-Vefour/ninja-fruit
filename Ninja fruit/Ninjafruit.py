@@ -27,7 +27,12 @@ score = 0
 coofruits = [(0,0),(383,0),(2*383,0),(0,383),(383,383)]
 cootaches = [(0,0),(383,0),(2*383,0),(0,383),(383*2,383)]
 taches = []
-
+impactpolice = pygame.font.SysFont("impact", 40)
+texteperdu1 = impactpolice.render("Tu croules sous les fruits!",True,(255,0,0))
+texteperdu2 = impactpolice.render("Tu as perdu gros naze,(tu as tué des japonais)",True,(255,0,0))
+texteperdu3 = impactpolice.render("PS : Toute ressemblance avec un évènement passé est fortuite",True,(255,255,255))
+affichagescore = impactpolice.render("Score:"+str(score),True,(255,0,0))
+affichageerreur = impactpolice.render("Fruits loupés"+str(erreur),True,(255,0,0))
 
 
 def defsprite(img,x, y, largeur, hauteur, taille):
@@ -42,17 +47,24 @@ def dessinerperdu():
     if erreur ==3 :
         fenetre.blit(imagefond, (0,0)) 
         fenetre.blit(fruitperdu,(0,0))
+        fenetre.blit(texteperdu1,(200,25))
         pygame.display.flip()
     else :
         fenetre.blit(bombeperdu,(0,0))
+        fenetre.blit(texteperdu2,(100,25))
+        fenetre.blit(texteperdu3,(0,550))
         pygame.display.flip()
     pygame.time.wait(10000) 
     
  
 
 def dessiner(): 
-    global serpent, fenetre, pomme, coofruits 
+    global serpent, fenetre, pomme, coofruits, erreur 
     fenetre.blit(imagefond, (0,0))
+    affichagescore = impactpolice.render("Score: "+str(score),True,(255,0,0))
+    affichageerreur = impactpolice.render("Fruits loupés : "+str(erreur),True,(255,0,0))
+    fenetre.blit(affichagescore,(0,0))
+    fenetre.blit(affichageerreur,(770,0))
     for slash in range (1,len(slashs)): 
           pygame.draw.line(fenetre, (255, 255, 245), slashs[slash-1], slashs[slash], 6)
     for fruit in fruits : 
@@ -131,13 +143,14 @@ while continuer: # Cette boucle s'exécute jusqu'à ce que le joueur ferme la fe
         fruits.append(creerfruit())
     for i in range(len(fruits)):
         fruit = fruits[i] #pour que ça soit pas chiant a écrire
+        print(erreur)
         if fruit[5] < 2 and fruit[1]!=(-200,-200) : #si le fruit est toujours dans le cadre(est passé une fois pour rentrer et sortir)
-            if fruit[1][1]==600 : 
+            if fruit[1][1]>=600 : 
                 fruit= [fruit[0],fruit[1],fruit[2],fruit[3],fruit[4],fruit[5]+1,fruit[6]]
             fruit = parabole(fruit)
-        elif fruit[5] >= 2:
-            erreur+=1 
+        elif fruit[5] == 2 and fruit[1] !=(-200,-200):
             fruit = (fruit[0], (-200, -200), fruit[2], fruit[3], fruit[4], fruit[5],fruit[6])
+            erreur+=1 
             if erreur == 3: 
                 dessinerperdu()
         fruits[i] = fruit     #je réactualise à la fin  
@@ -150,6 +163,8 @@ while continuer: # Cette boucle s'exécute jusqu'à ce que le joueur ferme la fe
             if bombe[1][1]==600 : 
                 bombe= [bombe[0],bombe[1],bombe[2],bombe[3],bombe[4],bombe[5]+1,bombe[6]]
             bombe = parabole(bombe)
+        elif bombe[5] >= 2: 
+            bombe = (bombe[0], (-200, -200), bombe[2], bombe[3], bombe[4], bombe[5],bombe[6])
         bombes[k] = bombe     #je réactualise à la fin 
 
     if click[0] == True :   
@@ -172,6 +187,8 @@ while continuer: # Cette boucle s'exécute jusqu'à ce que le joueur ferme la fe
              
         fruits = [fruit for fruit in fruits if fruit[1] != (-200, -200)]
         bombes = [bombe for bombe in bombes if bombe[1] != (-200, -200)]
+        print(bombes,fruits)
+        
 
             
 
