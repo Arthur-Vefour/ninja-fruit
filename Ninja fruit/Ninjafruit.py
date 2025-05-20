@@ -28,11 +28,11 @@ cootaches = [(0,0),(383,0),(2*383,0),(0,383),(383*2,383)]
 taches = []
 impactpolice = pygame.font.SysFont("impact", 40)
 texteperdu1 = impactpolice.render("Tu croules sous les fruits!",True,(255,0,0))
-texteperdu2 = impactpolice.render("Tu as perdu gros naze",True,(255,0,0))
+texteperdu2 = impactpolice.render("Tu as perdu gros naze !",True,(255,0,0))
 texteperdu3 = impactpolice.render("Toute ressemblance avec un événement passé est fortuite",True,(255,255,255))
 affichagescore = impactpolice.render("Score:"+str(score),True,(255,0,0))
 affichageerreur = impactpolice.render("Fruits loupés"+str(erreur),True,(255,0,0))
-texteperdu4 = impactpolice.render(str(score),True,(255,0,0))
+
 
 def defsprite(img,x, y, largeur, hauteur, taille):
     image = pygame.Surface((largeur, hauteur), pygame.SRCALPHA).convert_alpha()
@@ -43,7 +43,8 @@ def defsprite(img,x, y, largeur, hauteur, taille):
 def dessinerperdu():
     global continuer, erreur,score
     continuer = False
-    while continuer ==False :   
+    while continuer ==False :
+        texteperdu4 = impactpolice.render("Ton score final : "+str(score),True,(255,0,0))
         if erreur ==3 :
             fenetre.blit(imagefond, (0,0)) 
             fenetre.blit(fruitperdu,(0,0))
@@ -54,7 +55,7 @@ def dessinerperdu():
             fenetre.blit(texteperdu2,(100,25))
             fenetre.blit(texteperdu3,(0,550))
             
-        fenetre.blit(texteperdu4,(900,0))
+        fenetre.blit(texteperdu4,(700,25))
         pygame.display.flip()
         for event in pygame.event.get():
             if event.type == pygame.QUIT: # Permet de gérer un clic sur le bouton de fermeture de la fenêtre
@@ -71,16 +72,16 @@ def dessiner():
     affichageerreur = impactpolice.render("Fruits loupés : "+str(erreur),True,(255,0,0))
     fenetre.blit(affichagescore,(0,0))
     fenetre.blit(affichageerreur,(740,0))
-    for slash in range (1,len(slashs)): 
-          pygame.draw.line(fenetre, (255, 255, 245), slashs[slash-1], slashs[slash], 6)
     for tache in taches: 
-        fenetre.blit(defsprite(spritesplahs,cootaches[tache[1]][0],cootaches[tache[1]][1], 383, 383, 0.25),tache[0])  
+        fenetre.blit(defsprite(spritesplahs,cootaches[tache[1]][0],cootaches[tache[1]][1], 383, 383, 0.25),tache[0])
+    
     for fruit in fruits :
         if fruit[7]=="fruit": 
             fenetre.blit(defsprite(spritefruits,coofruits[fruit[6]][0],coofruits[fruit[6]][1],383,383,0.25),fruit[1])
         if fruit[7]=="bombe":
             fenetre.blit(defsprite(imagebombe,0,0,383, 383, 0.25),fruit[1])
-    
+    for slash in range (1,len(slashs)): 
+          pygame.draw.line(fenetre, (255, 255, 245), slashs[slash-1], slashs[slash], 6)
     pygame.display.flip()
 
 
